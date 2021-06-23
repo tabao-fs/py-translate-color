@@ -1,3 +1,5 @@
+from translate import Translator
+
 WHITESPACE = ' '
 
 colors_en = [
@@ -46,18 +48,27 @@ def main(word):
     elif word in colors_de:
         return colors_de[word]
 
+    result = ''
     if WHITESPACE in word:
         words = word.split()
-        result = ''
         for w in words:
             if w in colors_en:
                 result += w + WHITESPACE
             elif w in colors_de:
                 result += colors_de[w] + WHITESPACE
 
-        return result
+    if result == '':
+        try:
+            translator = Translator(from_lang='german', to_lang='english')
+            result = translator.translate(word)
+        except Exception:
+            return None
 
-    return None
+    if word == result:
+        return None
+
+    return result
+
 
 if __name__ == "__main__":
     word_input = input('Input: ')
